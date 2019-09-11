@@ -75,7 +75,7 @@ def get_guessed_word(secret_word, letters_guessed):
         result2 += x
     for x in fill:
         result += x
-    print(f"""Guess word so far: {result}\nThese words haven't been used though:{result2}""")
+    print(f"""Guess word so far: {result}\nThese letters haven't been used though:{result2}""")
     print(f"""You have a total of {values[1]} incorrect guesses.""")
    #TODO: Loop through the letters in secret word and build a string that shows the letters that have been guessed correctly so far that are saved in letters_guessed and underscores for the letters that have not been guessed yet
 def is_guess_in_word(guess, secret_word):
