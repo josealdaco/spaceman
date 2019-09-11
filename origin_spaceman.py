@@ -1,7 +1,11 @@
 import random
 import os
+from string import punctuation
 leftovers = {"a", "s", "d", "f", "g", "h", "j", "k", "l", "z", "x", "c", "v", "b", "n", "m", "q", "w", "e", "r", "t", "y", "u", "i", "o", "p"}
 fill = []
+number_List = set(punctuation)
+for x in range(0, 10):
+    number_List.add(x)
 phase1 = """
         O
         |
@@ -50,7 +54,6 @@ def load_word():
     fill.clear()
     for x in range(len(secret_word1)):
         fill.append("_")
-    print("Secret word:", secret_word1)
     print(len(fill))
     return secret_word1
 def is_word_guessed(secret_word):
@@ -58,10 +61,11 @@ def is_word_guessed(secret_word):
     for x in fill:
         remains += x
     if(secret_word == remains):
-        print("YOU HAVE FILLED OUT THE WORD")
+        print("YOU HAVE FILLED OUT THE WORD,HERE IS THE WORD COMPLETED:\n", secret_word)
         exit()
+
     elif(values[1] == 0 and secret_word != remains):
-        print("YOU HAVE NO GUESSES REMAINING, YOU LOSE :(\n x.x")
+        print("YOU HAVE NO GUESSES REMAINING, YOU LOSE :(\n x.x, here is the secret word that you missed:", secret_word)
         exit()
 
 def get_guessed_word(secret_word, letters_guessed):
@@ -79,26 +83,56 @@ def is_guess_in_word(guess, secret_word):
    index = 0
    found = False
    verify = True
-   print("This is the rest list:", fill)
-   for x in secret_word:
-       if(x == user_input):
-           print("Letters found")
-           fill[index] = user_input
-           found = True
-       index += 1
-   if(found is False):
-       print("LETTER INCORRECT")
-       values[1] -= 1
-       print(values[1])
-       return False
-   else:
-       for x in leftovers:
+   validated = False
+   check = False
+   while(validated == False):
+       if(len(user_input) > 1):
+           print("It has to be a single character letter")
+           user_input = input("Change answer>>")
+       elif(len(user_input) <= 0):
+           print("YOU HAVE TO INPUT A LETTER, CAN'T LEAVE IT BLANK")
+           user_input = input("Change answer>>")
+
+       for x in number_List:
+           for y in user_input:
+               if(x == y):
+                   print("You cannot have any numbers or symbols as an answer")
+                   user_input = input("Change Response>>")
+       if(len(user_input) == 1):
+           print("checking input")
+           for x in user_input:
+               for y in number_List:
+                   if(y != x):
+                       check = True
+                   elif(y == x):
+                       check = False
+           if(check == True):
+               print("breacking")
+               validated = True
+               break
+   if validated is True:
+       print("This is the rest list:", fill)
+       for x in secret_word:
            if(x == user_input):
-               verify = False
-       if(verify == True):
-           print("Your guess is in the word! :D")
-           leftovers.remove(guess)
-           return True
+               print("Letters found")
+               fill[index] = user_input
+               found = True
+           index += 1
+       if(found is False):
+           print("LETTER INCORRECT")
+           values[1] -= 1
+           print(values[1])
+           return False
+       else:
+           for x in leftovers:
+               if(x == user_input):
+                    verify = False
+           if(verify == False):
+               print("Your guess is in the word! :D")
+               leftovers.remove(user_input)
+               return True
+           elif(verify == True):
+               print("YOUR GUESS HAS ALREADY BEEN USED")
    #TODO: check if the letter guess is in the secret word
 def spaceman(secret_word):
    introduction = f"Welcome to spaceman!\nThe secret word contains: {values[0]} letters\n You have a total of {values[1]} incorrect guesses,please enter a letter per round :\n------------------------------------------------------------------------ "
@@ -107,11 +141,12 @@ def spaceman(secret_word):
    for x in secret_word:
        word += x
    print(len(word))
-
+def validate(x):
+    if(x == "RESTARTING"):
+        return True
 check = True
 #These function calls that will start the game
 secret_word = load_word()
-print("This is the secret word now:", secret_word)
 values = [len(secret_word), 6]
 
 spaceman(secret_word)
