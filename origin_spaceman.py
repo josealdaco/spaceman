@@ -121,7 +121,7 @@ def is_guess_in_word(guess, secret_word):
        if(found is False):
            print("LETTER INCORRECT")
            values[1] -= 1
-           print(values[1])
+           print("remaining guesses:", values[1])
            return False
        else:
            for x in leftovers:
@@ -147,7 +147,7 @@ def validate(x):
 check = True
 #These function calls that will start the game
 secret_word = load_word()
-values = [len(secret_word), 6]
+values = [len(secret_word), 7]
 
 spaceman(secret_word)
 while(check):
@@ -160,9 +160,9 @@ while(check):
        values[1] = 6
    else:
        os.system('clear')
-       if(values[1]== 6):
+       if(values[1]== 7):
            print(phase1)
-       elif(values[1]== 5):
+       elif(values[1]== 6):
            print(phase2)
        elif(values[1]== 4):
            print(phase3)
